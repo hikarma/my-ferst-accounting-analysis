@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Учет личных финансов</title>
+  <!-- Font Awesome для иконок -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 15px;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .btn-group a {
+      padding: 12px 20px;
+      background-color: white;
+      color: #4CAF50;
+      border: 2px solid white;
+      border-radius: 6px;
+      font-size: 1em;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .btn-group a:hover {
+      background-color: #ffffffcc;
+      border-color: #388e3c;
+      color: #2e7d32;
+    }
+
+    section {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: white;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.8em;
+      margin-bottom: 15px;
+      color: #4CAF50;
+    }
+
+    ul {
+      text-align: left;
+      margin-top: 15px;
+      padding-left: 20px;
+    }
+
+    ul li {
+      margin-bottom: 10px;
+      font-size: 1.05em;
+    }
+
+    .tips {
+      background-color: #eafaf1;
+      border-left: 6px solid #4CAF50;
+      padding: 15px 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .tips li::before {
+      content: "💡 ";
+    }
+
+    .social-links {
+      margin-top: 25px;
+    }
+
+    .social-links a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
+    }
+
+    .social-links a i {
+      margin-right: 8px;
+    }
+
+    .social-links a:hover {
+      background-color: #388e3c;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+      background-color: #333;
+      color: white;
+    }
+
+    .support-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 15px 25px;
+      font-size: 1.1em;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      z-index: 1000;
+      transition: background-color 0.3s;
+    }
+
+    .support-button:hover {
+      background-color: #e64a19;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2em;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Учет личных финансов</h1>
+    <div class="btn-group">
+      <a href="index.html"><i class="fas fa-house"></i> Главная</a>
+      <a href="#add-record"><i class="fas fa-plus-circle"></i> Добавить запись</a>
+      <a href="#financial-report"><i class="fas fa-chart-line"></i> Анализ данных</a>
+      <a href="index_356.html"><i class="fas fa-book"></i> Финансовая грамотность</a>
+      <a href="contact.html"><i class="fas fa-address-card"></i> Контакты</a>
+    </div>
+  </header>
+
+  <section class="resources">
+    <h2>Полезные материалы по финансовой грамотности</h2>
+    <p>
+      На официальном сайте проекта опубликованы статьи с советами по управлению личными финансами, 
+      примеры ведения бюджета для подростков, а также рекомендации для педагогов по финансовому воспитанию.
+    </p>
+    <ul>
+      <li>📘 Советы по управлению личными финансами</li>
+      <li>🧮 Примеры бюджетов для подростков</li>
+      <li>🎓 Методические материалы для педагогов</li>
+    </ul>
+
+    <div class="tips">
+      <h3 style="color:#2e7d32;">Финансовые советы 💰</h3>
+      <ul>
+        <li>Ведите учет всех доходов и расходов. Это поможет видеть полную картину ваших финансов.</li>
+        <li>Откладывайте минимум 10% от дохода в резервный фонд на непредвиденные случаи.</li>
+        <li>Планируйте покупки заранее, избегайте импульсивных трат.</li>
+      </ul>
+    </div>
+
+    <p>Материалы также доступны в социальных сетях:</p>
+    <div class="social-links">
+      <a href="https://vk.com/yourproject" target="_blank"><i class="fab fa-vk"></i> ВКонтакте</a>
+      <a href="https://t.me/yourproject" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 МБОДО СЮТ "Станция юных техников". Все права защищены.</p>
+  </footer>
+
+  <button class="support-button" onclick="alert('Пожалуйста, свяжитесь с техподдержкой по email: support@yourdomain.ru')">
+    Поддержка
+  </button>
+
+</body>
+</html>
+
+
+

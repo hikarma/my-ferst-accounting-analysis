@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Учет личных финансов</title>
+  <meta name="description" content="Веб-приложение для учета личных финансов, с анализом доходов и расходов.">
+  <meta name="keywords" content="учет финансов, доходы, расходы, анализ данных">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header, footer {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 15px;
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+
+    nav ul li {
+      margin: 5px 10px;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      padding: 8px 16px;
+      background: white;
+      color: #4CAF50;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .nav-btn:hover {
+      background-color: #e8f5e9;
+    }
+
+    section {
+      background-color: #fff;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 1000px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    form label {
+      margin-top: 10px;
+      display: block;
+      font-weight: bold;
+    }
+
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+
+    form button, .support-button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .support-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #ff5722;
+      border-radius: 50px;
+      padding: 15px 25px;
+      font-size: 1.1em;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Учет личных финансов</h1>
+</header>
+
+<nav>
+  <ul>
+    <li><a class="nav-btn" href="index.html">Главная</a></li>
+  </ul>
+</nav>
+
+
+
+
+<section id="analysis">
+    <h2>Анализ данных</h2>
+    <canvas id="financialChart" style="max-width:700px; margin:auto;"></canvas>
+  </section>
+
+<h2>История операций</h2>
+<table id="recordsTable" class="display nowrap" style="width:100%">
+  <thead>
+    <tr>
+      <th>Тип</th>
+      <th>Сумма</th>
+      <th>Категория</th>
+      <th>Дата</th>
+      <th>Описание</th>
+      <th>Действия</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<footer>
+  <p>© 2025 МБОДО СЮТ "Станция юных техников"</p>
+</footer>
+
+<button class="support-button" onclick="alert('Обратитесь в поддержку: support@yourdomain.ru')">Поддержка</button>
+
+<!-- Подключение скриптов -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+<script>
+  const form = $('#financial-form');
+  const table = $('#recordsTable').DataTable({
+    dom: 'Bfrtip',
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5'],
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ru.json"
+    }
+  });
+
+  let chart;
+  let financialData = JSON.parse(localStorage.getItem('financialData')) || [];
+
+  function refreshTable() {
+    table.clear();
+    financialData.forEach((record, index) => {
+      table.row.add([
+        record.type === 'income' ? 'Доход' : 'Расход',
+        record.amount + ' ₽',
+        record.category,
+        record.date,
+        record.description || '',
+        `<button onclick="editRecord(${index})">✏</button> <button onclick="deleteRecord(${index})">🗑</button>`
+      ]);
+    });
+    table.draw();
+  }
+
+  function updateChart() {
+    const income = financialData.filter(r => r.type === 'income').reduce((s, r) => s + r.amount, 0);
+    const expense = financialData.filter(r => r.type === 'expense').reduce((s, r) => s + r.amount, 0);
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(document.getElementById('financialChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Доходы', 'Расходы'],
+        datasets: [{
+          data: [income, expense],
+          backgroundColor: ['#4CAF50', '#FF5722']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+  }
+
+  form.on('submit', function(e) {
+    e.preventDefault();
+    const record = {
+      amount: parseFloat($('#amount').val()),
+      type: $('#type').val(),
+      category: $('#category').val(),
+      date: $('#date').val(),
+      description: $('#description').val()
+    };
+    financialData.push(record);
+    localStorage.setItem('financialData', JSON.stringify(financialData));
+    form[0].reset();
+    refreshTable();
+    updateChart();
+  });
+
+  window.deleteRecord = function(index) {
+    if (confirm('Удалить запись?')) {
+      financialData.splice(index, 1);
+      localStorage.setItem('financialData', JSON.stringify(financialData));
+      refreshTable();
+      updateChart();
+    }
+  };
+
+  window.editRecord = function(index) {
+    const r = financialData[index];
+    $('#amount').val(r.amount);
+    $('#type').val(r.type);
+    $('#category').val(r.category);
+    $('#date').val(r.date);
+    $('#description').val(r.description);
+    financialData.splice(index, 1);
+    localStorage.setItem('financialData', JSON.stringify(financialData));
+    refreshTable();
+    updateChart();
+  };
+
+  refreshTable();
+  updateChart();
+</script>
+
+</body>
+</html>

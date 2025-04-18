@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Добавить запись — Учёт финансов</title>
+  <meta name="description" content="Добавление записи дохода или расхода.">
+  <meta name="keywords" content="финансы, доходы, расходы, добавить запись">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0 10px;
+    }
+
+    header, footer {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 15px;
+    }
+
+    nav {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      padding: 10px 20px;
+      background: #ffffff;
+      color: #4CAF50;
+      border: 2px solid #4CAF50;
+      border-radius: 5px;
+      margin: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .nav-btn:hover {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    section {
+      background-color: #fff;
+      margin: 30px auto;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 600px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 12px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .support-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 15px 25px;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Добавить запись</h1>
+</header>
+
+<nav>
+  <a class="nav-btn" href="index.html">Главная</a>
+  <a class="nav-btn" href="index_13.html">Анализ данных</a></li>
+</nav>
+
+<section>
+  <h2>Новая запись</h2>
+  <form id="financial-form">
+    <label for="amount">Сумма (₽):</label>
+    <input type="number" id="amount" required min="0" step="0.01">
+
+    <label for="type">Тип записи:</label>
+    <select id="type" required>
+      <option value="income">Доход</option>
+      <option value="expense">Расход</option>
+    </select>
+
+    <label for="category">Категория:</label>
+    <input type="text" id="category" required placeholder="Например: зарплата, продукты">
+
+    <label for="date">Дата:</label>
+    <input type="date" id="date" required>
+
+    <label for="description">Описание (необязательно):</label>
+    <textarea id="description" rows="3" placeholder="Дополнительные детали..."></textarea>
+
+    <button type="submit">Сохранить</button>
+  </form>
+</section>
+
+<footer>
+  <p>© 2025 МБОДО СЮТ "Станция юных техников"</p>
+</footer>
+
+
+
+<script>
+  document.getElementById("financial-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const record = {
+      amount: parseFloat(document.getElementById("amount").value),
+      type: document.getElementById("type").value,
+      category: document.getElementById("category").value,
+      date: document.getElementById("date").value,
+      description: document.getElementById("description").value
+    };
+
+    let data = JSON.parse(localStorage.getItem("financialData")) || [];
+    data.push(record);
+    localStorage.setItem("financialData", JSON.stringify(data));
+
+    alert("Запись успешно добавлена!");
+    this.reset();
+  });
+</script>
+
+</body>
+</html>

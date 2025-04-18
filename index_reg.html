@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Регистрация с подтверждением</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #388e3c;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .checkbox-group input {
+      width: auto;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Форма регистрации</h2>
+    <form id="registrationForm">
+      <label for="username">Имя пользователя:</label>
+      <input type="text" id="username" name="username">
+      <div class="error" id="usernameError"></div>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email">
+      <div class="error" id="emailError"></div>
+
+      <label for="password">Пароль:</label>
+      <input type="password" id="password" name="password">
+      <div class="error" id="passwordError"></div>
+
+      <label for="confirmPassword">Подтвердите пароль:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword">
+      <div class="error" id="confirmError"></div>
+
+      <label for="comment">Комментарий:</label>
+      <textarea id="comment" name="comment" rows="3"></textarea>
+      <div class="error" id="commentError"></div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="agree" name="agree">
+        <label for="agree">Я согласен на обработку персональных данных</label>
+      </div>
+      <div class="error" id="agreeError"></div>
+
+      <button type="submit">Зарегистрироваться</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('registrationForm');
+    const dangerousPattern = /(<|>|"|\'|;|--|\/\*|\*\/|SELECT|DROP|INSERT|DELETE|UPDATE|WHERE|OR\s+1=1|=|script)/i;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const comment = document.getElementById('comment').value.trim();
+      const agree = document.getElementById('agree').checked;
+
+      document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+      let hasError = false;
+
+      function checkDangerous(value, fieldId, fieldName) {
+        if (dangerousPattern.test(value)) {
+          document.getElementById(fieldId).textContent = `Ошибка: ${fieldName} содержит недопустимые символы.`;
+          hasError = true;
+        }
+      }
+
+      checkDangerous(username, 'usernameError', 'Имя пользователя');
+      checkDangerous(email, 'emailError', 'Email');
+      checkDangerous(comment, 'commentError', 'Комментарий');
+
+      if (!email.includes('@')) {
+        document.getElementById('emailError').textContent = 'Неверный формат email.';
+        hasError = true;
+      }
+
+      if (password.length < 6) {
+        document.getElementById('passwordError').textContent = 'Пароль должен содержать минимум 6 символов.';
+        hasError = true;
+      }
+
+      if (password !== confirmPassword) {
+        document.getElementById('confirmError').textContent = 'Пароли не совпадают.';
+        hasError = true;
+      }
+
+      if (!agree) {
+        document.getElementById('agreeError').textContent = 'Вы должны согласиться с условиями.';
+        hasError = true;
+      }
+
+      if (!hasError) {
+        alert('Регистрация прошла успешно!');
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>
+
